@@ -3,7 +3,6 @@
 import os
 import unittest
 
-from contextlib import contextmanager
 import cv2
 
 from detectionapi.detection.detection import Detection
@@ -14,7 +13,6 @@ example_input_image = os.path.dirname(
 
 
 class DetectionTests(unittest.TestCase):
-    @contextmanager
     def setUp(self):
         self.tensor = None
         self.image = None
@@ -22,11 +20,16 @@ class DetectionTests(unittest.TestCase):
         self.this_detection_model = Detection()
         self.assertIsInstance(self.this_detection_model.net, cv2.dnn_Net)
 
-    def test_preprocess(self):
         self.image = cv2.imread(example_input_image)
-        self.tensor = self.this_detection_model.preprocess(self.image)
 
-    def test_process(self):
-        self.this_detection_model.process(self.tensor)
+    def test_1_preprocess(self):
+        self.__class__.tensor = self.this_detection_model.preprocess(
+            self.image)
 
-        yield
+    def test_2_process(self):
+        self.__class__.inference_results = self.this_detection_model.process(
+            self.__class__.tensor)
+
+    def test_3_postprocess(self):
+        self.this_detection_model.postprocess(
+            self.image, self.__class__.inference_results)
