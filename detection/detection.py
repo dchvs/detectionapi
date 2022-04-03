@@ -33,9 +33,9 @@ class Model:
 
 
 class Detection(Model):
-    """
-    Class that does the Detection model operations.
+    """ Class that does the Detection model operations.
 
+    ...
     Attributes
     ----------
     net : Net object
@@ -43,15 +43,15 @@ class Detection(Model):
 
     Methods
     -------
+    preprocess(image):
+        Apply the preprocessing of an input image, i.e., normalizes the image to a size.
 
-    Raises
-    ------
+    process(tensor):
+        Get the predictions out of an input tensor.
     """
 
     def __init__(self):
-        """
-         Parameters
-         ----------
+        """ Class that does the Detection model operations.
          """
         self.net = cv2.dnn.readNet(
             os.path.dirname(__file__) +
@@ -93,3 +93,27 @@ class Detection(Model):
             raise DetectionError('Unable to preprocess the input image.')
 
         return tensor
+
+    def process(self, tensor):
+        """ Get the predictions out of an input tensor.
+
+        Parameters
+        ----------
+        tensor : tensor data.
+            The input tensor to apply the inference to.
+
+        Returns
+        -------
+        inference_results : ndarray
+            Array with the inference results.
+
+        Raises
+        ------
+        DetectionError
+            If unable to process the input tensor.
+        """
+        self.net.setInput(tensor)
+        predictions = self.net.forward()
+        inference_results = predictions[0]
+
+        return inference_results
