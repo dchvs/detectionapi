@@ -208,4 +208,4 @@ class Detection(Model):
                  0,
                  0))
 
-        return class_ids, confidences, boxes
+        return result_class_ids, result_confidences, result_boxes

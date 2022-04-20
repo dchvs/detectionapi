@@ -11,6 +11,8 @@ from detectionapi.detection.detection import Detection
 example_input_image = os.path.dirname(
     __file__) + '/../data/example_input_image.jpeg'
 
+example_input_image_confidences = 3
+
 
 class DetectionTests(unittest.TestCase):
     def setUp(self):
@@ -31,5 +33,7 @@ class DetectionTests(unittest.TestCase):
             self.__class__.tensor)
 
     def test_3_postprocess(self):
-        self.this_detection_model.postprocess(
+        class_ids, confidences, boxes = self.this_detection_model.postprocess(
             self.image, self.__class__.inference_results)
+
+        self.assertEqual(example_input_image_confidences, len(confidences))
