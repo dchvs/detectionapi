@@ -5,7 +5,6 @@ import os.path
 import cv2
 import numpy as np
 
-
 scale_factor = 1 / 255.0
 size_tuple = (640, 640)
 
@@ -209,3 +208,31 @@ class Detection(Model):
                  0))
 
         return result_class_ids, result_confidences, result_boxes
+
+    def is_detection(self, result_class_ids, result_confidences):
+        """ Flag that determines whether there was a detection.
+
+        Parameters
+        ----------
+        result_class_ids : array.
+            Array with the inference results for class IDs.
+        result_confidences :  array.
+            Array with the inference results for confidences.
+
+        Returns
+        -------
+        detection_flag : bool.
+            The flag with the detection result.
+
+        Raises
+        ------
+        DetectionError
+            If unable to set the flag with the detection result.
+        """
+        try:
+            detection_flag = True if len(result_class_ids) > 0 else False
+        except BaseException:
+            raise DetectionError(
+                'Unable to set the flag with the detection result.')
+
+        return detection_flag

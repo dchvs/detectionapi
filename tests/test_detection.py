@@ -33,7 +33,14 @@ class DetectionTests(unittest.TestCase):
             self.__class__.tensor)
 
     def test_3_postprocess(self):
-        class_ids, confidences, boxes = self.this_detection_model.postprocess(
+        self.__class__.class_ids, self.__class__.confidences, boxes = self.this_detection_model.postprocess(
             self.image, self.__class__.inference_results)
 
-        self.assertEqual(example_input_image_confidences, len(confidences))
+        self.assertEqual(
+            example_input_image_confidences, len(
+                self.__class__.confidences))
+
+    def test_4_is_detection(self):
+        is_detection = self.this_detection_model.is_detection(
+            self.__class__.class_ids, self.__class__.confidences)
+        self.assertTrue(is_detection)
