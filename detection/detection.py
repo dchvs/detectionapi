@@ -52,9 +52,7 @@ class Detection(Model):
     def __init__(self):
         """ Class that does the Detection model operations.
          """
-        self.net = cv2.dnn.readNet(
-            os.path.dirname(__file__) +
-            '/../data/yolov5s.onnx')
+        self.net = cv2.dnn.readNet(os.path.abspath('detectionapi/data/yolov5s.onnx'))
 
     def preprocess(self, image):
         """Apply the preprocessing of an input image, i.e., normalizes the image to a size.
@@ -151,7 +149,7 @@ class Detection(Model):
         for r in range(rows):
             row = inference_results[r]
             confidence = row[4]
-            if confidence >= 0.4:
+            if confidence >= 0.2:
 
                 classes_scores = row[5:]
                 _, _, _, max_indx = cv2.minMaxLoc(classes_scores)
@@ -180,7 +178,7 @@ class Detection(Model):
             result_boxes.append(boxes[i])
 
         class_list = []
-        with open(os.path.dirname(os.path.abspath(__file__)) + "/../data/classes.txt", "r") as f:
+        with open(os.path.abspath('detectionapi/data/classes.txt'), "r") as f:
             class_list = [cname.strip() for cname in f.readlines()]
 
         colors = [(255, 255, 0), (0, 255, 0), (0, 255, 255), (255, 0, 0)]
