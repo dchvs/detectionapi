@@ -5,6 +5,15 @@ import os.path
 import cv2
 import numpy as np
 
+
+def YoloV5_Supported_Shape(): return None
+
+
+YoloV5_Supported_Shape.Width = 640
+YoloV5_Supported_Shape.Height = 640
+YoloV5_Supported_Shape.Dims = 3
+
+
 scale_factor = 1 / 255.0
 size_tuple = (640, 640)
 
