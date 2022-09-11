@@ -2,6 +2,7 @@
 
 import os.path
 
+from abc import ABCMeta, abstractmethod
 import cv2
 import numpy as np
 
@@ -29,7 +30,7 @@ class DetectionError(RuntimeError):
     pass
 
 
-class Model:
+class Model(metaclass=ABCMeta):
     """
     Class that abstracts the Machine Learning models.
 
@@ -44,6 +45,18 @@ class Model:
     """
 
     def __init__(self):
+        pass
+
+    @abstractmethod
+    def preprocess(self, image):
+        pass
+
+    @abstractmethod
+    def process(self, tensor):
+        pass
+
+    @abstractmethod
+    def postprocess(self, input_image, inference_results):
         pass
 
 
