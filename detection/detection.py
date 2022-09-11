@@ -13,9 +13,16 @@ YoloV5_Supported_Shape.Width = 640
 YoloV5_Supported_Shape.Height = 640
 YoloV5_Supported_Shape.Dims = 3
 
+def YoloV5(): return None
+YoloV5.width = YoloV5_Supported_Shape.Width
+YoloV5.height = YoloV5_Supported_Shape.Height
+YoloV5.dims = YoloV5_Supported_Shape.Dims
+YoloV5.dataset = "detectionapi/data/yolov5s.onnx"
+YoloV5.dataclasses = "detectionapi/data/classes.txt"
+
 
 scale_factor = 1 / 255.0
-size_tuple = (640, 640)
+size_tuple = (YoloV5.width, YoloV5.height)
 
 
 class DetectionError(RuntimeError):
@@ -61,7 +68,7 @@ class Detection(Model):
     def __init__(self):
         """ Class that does the Detection model operations.
          """
-        self.net = cv2.dnn.readNet(os.path.abspath('detectionapi/data/yolov5s.onnx'))
+        self.net = cv2.dnn.readNet(os.path.abspath(YoloV5.dataset))
 
     def preprocess(self, image):
         """Apply the preprocessing of an input image, i.e., normalizes the image to a size.
@@ -152,8 +159,8 @@ class Detection(Model):
 
         image_width, image_height, _ = input_image.shape
 
-        x_factor = image_width / 640
-        y_factor = image_height / 640
+        x_factor = image_width / YoloV5_Supported_Shape.Width
+        y_factor = image_height / YoloV5_Supported_Shape.Height
 
         for r in range(rows):
             row = inference_results[r]
@@ -187,7 +194,7 @@ class Detection(Model):
             result_boxes.append(boxes[i])
 
         class_list = []
-        with open(os.path.abspath('detectionapi/data/classes.txt'), "r") as f:
+        with open(os.path.abspath(YoloV5.dataclasses), "r") as f:
             class_list = [cname.strip() for cname in f.readlines()]
 
         colors = [(255, 255, 0), (0, 255, 0), (0, 255, 255), (255, 0, 0)]
